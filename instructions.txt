@@ -1,0 +1,4 @@
+start venv by running this C:\Users\user\Desktop\New folder\code\venv\Scripts\activate.bat
+then cd to movie-rec-website
+then run manage.py runserver
+boom server is up and running (shutdown server with ctrl-C)
