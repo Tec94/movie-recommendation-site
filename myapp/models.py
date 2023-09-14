@@ -1,12 +1,10 @@
 from django.db import models
+from imdb import Cinemagoer
 
 # Create your models here.
-'''class Movie(models.Model):
+class Movie(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
-    release_date = models.DateField()
-    poster = models.ImageField(upload_to='movie_posters/')
-    # Add more fields as needed, such as genre, director, etc.
+    poster = models.CharField(max_length=500)
 
-    def __str__(self):
-        return self.title'''
+    def get_movie_data(self, id):
+        return Cinemagoer.get_movie(id)
