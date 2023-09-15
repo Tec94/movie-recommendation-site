@@ -1,10 +1,28 @@
 :root {
-    --background-color: #8a8a8a;
+    --background-color: #271e0f;
     --poster-size: 267px;
+    --text-color: #c4baaa;
+}
+#search {
+    color: rgb(255, 255, 255);
+}
+#search {
+    width: 400px;
+    margin: 0;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -200px;
+}
+#search, #sidebar_menu, .film-poster-ahref i, .film-poster-ahref:after, .film-poster-ahref:before, .film-poster-img, .search-content input.search-input {
+    transition: all .5s ease 0s;
+    -webkit-transition: all .5s ease 0s;
+    -moz-transition: all .5s ease 0s;
 }
 body {
-    background: #8a8a8a;
-    color: #fff;
+    background: var(--background-color);
+    color: var(--text-color);
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 1.5;
