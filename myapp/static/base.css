@@ -80,7 +80,7 @@ div.movie > img {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 40%;
     height: var(--poster-size);
     border: none;
     cursor: pointer;
