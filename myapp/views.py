@@ -1,11 +1,50 @@
 from django.shortcuts import render
 from django.db import connections
-from .models import Movie
 from imdb import Cinemagoer
-import imdb
-import os, random
+import imdb, os, random, pandas as pd, re, numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-# Create your views here.
+def clean_title(title):
+    title = re.sub("[^a-zA-Z0-9 ]", "", title)
+    return title
+
+movies_rec = pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\movies.csv')
+ratings = pd.read_csv("C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\ratings.csv")
+movies_rec["clean_title"] = movies_rec["title"].apply(clean_title)
+
+vectorizer = TfidfVectorizer(ngram_range=(1,2))
+tfidf = vectorizer.fit_transform(movies_rec["clean_title"])
+
+def search(title):
+    title = clean_title(title)
+    query_vec = vectorizer.transform([title])
+    similarity = cosine_similarity(query_vec, tfidf).flatten()
+    indices = np.argpartition(similarity, -5)[-5:]
+    results = movies_rec.iloc[indices].iloc[::-1]
+    
+    return results
+
+# write a function that returns the movieId from the title using search function and only return the first result and the second id
+def get_movie_id(title):
+    movie_id = search(title).head(1)['movieId'].to_string(index=False)
+    return movie_id
+
+def find_similar_movies(movie_id):
+    similar_users = ratings[(ratings["movieId"] == movie_id) & (ratings["rating"] > 4)]["userId"].unique()
+    similar_user_recs = ratings[(ratings["userId"].isin(similar_users)) & (ratings["rating"] > 4)]["movieId"]
+    similar_user_recs = similar_user_recs.value_counts() / len(similar_users)
+
+    similar_user_recs = similar_user_recs[similar_user_recs > .10]
+    all_users = ratings[(ratings["movieId"].isin(similar_user_recs.index)) & (ratings["rating"] > 4)]
+    all_user_recs = all_users["movieId"].value_counts() / len(all_users["userId"].unique())
+    rec_percentages = pd.concat([similar_user_recs, all_user_recs], axis=1)
+    rec_percentages.columns = ["similar", "all"]
+    
+    rec_percentages["score"] = rec_percentages["similar"] / rec_percentages["all"]
+    rec_percentages = rec_percentages.sort_values("score", ascending=False)
+    return rec_percentages.head(10).merge(movies_rec, left_index=True, right_on="movieId")[["score", "title", "genres"]]
+
 def url_clean(url):
     base, ext = os.path.splitext(url)
     i = url.count('@')
