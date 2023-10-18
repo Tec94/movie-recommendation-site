@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 
 ml-25m/
+test_script.py
