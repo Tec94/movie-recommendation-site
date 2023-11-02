@@ -4,6 +4,7 @@ from imdb import Cinemagoer
 import imdb, os, random, pandas as pd, re, numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from django.contrib.auth.decorators import login_required
 
 def clean_title(title):
     title = re.sub("[^a-zA-Z0-9 ]", "", title)
@@ -52,6 +53,7 @@ def url_clean(url):
     url = s2 + '@' * i + ext
     return url
 
+@login_required
 def home(request):
     ia = Cinemagoer('s3', 'mysql+mysqldb://root:root@localhost:3306/moviesDB') # local dataset - no cover url
     ib = imdb.IMDb() # imdb database - cover url
@@ -106,3 +108,6 @@ def home(request):
     photo6 = url6
 
     return render(request, 'home.html', {'movie1': movie1, 'movie2': movie2, 'movie3': movie3, 'movie4': movie4, 'movie5': movie5, 'movie6': movie6, 'photo1': photo1, 'photo2': photo2, 'photo3': photo3, 'photo4': photo4, 'photo5': photo5, 'photo6': photo6})
+
+def login(request):
+    return render(request, 'login.html', {})
