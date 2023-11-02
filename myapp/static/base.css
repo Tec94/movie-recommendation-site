@@ -89,7 +89,7 @@ position: absolute;
 right: 1px;
 border-radius: 50%;
 cursor: pointer;
-transition: 0.3s ease all;
+transition: all 0.3s ease;
 }
 
 .sidebar {
@@ -159,7 +159,7 @@ display: flex;
 align-items: center;
 height: 300px;
 transform: translateX(0);
-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease;
 }
 
 .movie-list-item {
@@ -171,16 +171,18 @@ position: relative;
 transform: scale(1.2);
 margin: 0 30px;
 opacity: 0.5;
+transition: all 0.3s ease;
 }
 
 .movie-list-item:hover .movie-list-item-title,
 .movie-list-item:hover .movie-list-item-desc,
 .movie-list-item:hover .movie-list-item-button {
 opacity: 1;
+transition: all 0.3s ease;
 }
 
 .movie-list-item-img {
-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease;
 width: 270px;
 height: 200px;
 object-fit: cover;
@@ -196,7 +198,7 @@ position: absolute;
 top: 10%;
 left: 50px;
 opacity: 0;
-transition: 0.3s all ease-in-out;
+transition: all 0.3s ease;
 }
 
 .movie-list-item-desc {
@@ -208,7 +210,7 @@ top: 30%;
 left: 50px;
 width: 230px;
 opacity: 0;
-transition: 0.3s all ease-in-out;
+transition: all 0.3s ease;
 }
 
 .movie-list-item-button {
@@ -223,7 +225,7 @@ position: absolute;
 bottom: 20px;
 left: 50px;
 opacity: 0;
-transition: 0.3s all ease-in-out;
+transition: 0.3s all ease;
 }
 
 .arrow {
