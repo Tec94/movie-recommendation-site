@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'myapp',
     'crispy_forms',
     "crispy_bootstrap4",
+    'register.apps.RegisterConfig',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"

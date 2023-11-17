@@ -1,17 +1,30 @@
-
 <!DOCTYPE html>
 <html>
     <head>
         <title>Login Page</title>
+        <link rel="stylesheet" href="../../static/login.css">
     </head>
     <body>
-        {% load crispy_forms_tags %}
-        <h1>Login</h1>
-        <form method="post" class="from-group">
         {% csrf_token %}
-            {{ form|crispy }}
-            <p>Don't have an account? Create one <a href="/register">here</a></p>
-            <button type="submit" class="btn btn-success">Login</button>	
-        </form>
+        <div class="form-wrapper">
+            <h2>Sign In</h2>
+            <form action="#">
+                <div class="form-control">
+                    <input type="text" required>
+                    <label>Email or phone number</label>
+                </div>
+                <div class="form-control">
+                    <input type="password" required>
+                    <label>Password</label>
+                </div>
+                <button type="submit">Sign In</button>
+                <div class="form-help"> 
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-me">
+                        <label for="remember-me">Remember me</label>
+                    </div>
+                </div>
+            </form>
+        <p>Need an account? <a href="register/">Sign up now</a></p>
     </body>
 </html>
