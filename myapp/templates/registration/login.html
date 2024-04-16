@@ -5,16 +5,16 @@
         <link rel="stylesheet" href="../../static/login.css">
     </head>
     <body>
-        {% csrf_token %}
         <div class="form-wrapper">
             <h2>Sign In</h2>
-            <form action="#">
+            <form method="post" action="{% url 'index' %}">
+                {% csrf_token %}
                 <div class="form-control">
                     <input type="text" required>
                     <label>Email or phone number</label>
                 </div>
                 <div class="form-control">
-                    <input type="password" required>
+                    <input type="password" required>`
                     <label>Password</label>
                 </div>
                 <button type="submit">Sign In</button>
