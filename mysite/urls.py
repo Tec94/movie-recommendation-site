@@ -18,11 +18,17 @@ from django.urls import path, include
 from django.contrib import admin
 from myapp import views
 from django.contrib.auth import views as auth_views
+from django.shortcuts import render
+from django import http
+
+def test(request):
+    # print all post data
+    print(request.POST)
+    return http.HttpResponse('OK')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', views.index, name='index'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
-    # path('login/register/', views.register_request, name='register'),
+    path('test/', test, name='test'),
 ]
