@@ -40,7 +40,7 @@ def getAccuracy():
 
     return results
 
-user_ratings = pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\small_ratings.csv')
+user_ratings = ratings # pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\small_ratings.csv')
 
 def find_similar_movies(movie_id): # run for each movie then return a huge list of recommended movies
     similar_users = user_ratings[(user_ratings["movieId"] == movie_id) & (user_ratings["rating"] > 4)]["userId"].unique()
