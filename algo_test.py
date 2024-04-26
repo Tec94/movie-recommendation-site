@@ -7,12 +7,13 @@ import pickle as pi, re, pandas as pd
 from datetime import time
 
 # load the data
-data = model_test.LoadFile()
+data = model_test.LoadFile2()
+ratings, movies = model_test.LoadFile()
 
 
 def predict_rating(algo, user_id, movie_id):
     # Load the data
-    data = model_test.LoadFile()
+    data = model_test.LoadFile2()
 
     # Add the user's past user_ratings to the data before building trainset
     user_ratings = pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\user_ratings.csv')
@@ -40,7 +41,6 @@ def getAccuracy():
     return results
 
 user_ratings = pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\small_ratings.csv')
-movies = pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\movies.csv')
 
 def find_similar_movies(movie_id): # run for each movie then return a huge list of recommended movies
     similar_users = user_ratings[(user_ratings["movieId"] == movie_id) & (user_ratings["rating"] > 4)]["userId"].unique()
@@ -57,17 +57,15 @@ def find_similar_movies(movie_id): # run for each movie then return a huge list 
     rec_percentages = rec_percentages.sort_values("score", ascending=False)
     return rec_percentages.head(10).merge(movies, left_index=True, right_on="movieId")[["score", "title", "genres"]]
 
-# get top n rec for each user
-def get_top_n(predictions, n=10):
-    # First map the predictions to each user.
+# get top n movies
+def get_top_movies(n=10):
     top_n = defaultdict(list)
-    for uid, iid, true_r, est, _ in predictions:
-        top_n[uid].append((iid, est))
+    for index, row in user_ratings.iterrows():
+        top_n[row["userId"]].append((row["movieId"], row["rating"]))
 
-    # Then sort the predictions for each user and retrieve the n highest ones.
-    for uid, user_ratings in top_n.items():
+    for user_id, user_ratings in top_n.items():
         user_ratings.sort(key=lambda x: x[1], reverse=True)
-        top_n[uid] = user_ratings[:n]
+        top_n[user_id] = user_ratings[:n]
 
     return top_n
 

@@ -17,28 +17,17 @@ def getCoverUrl(movie_title):
     ia.update(movie)
     return movie['cover url']
 
-import csv
-from myapp.models import Movie
-
-def import_books(file_path):
-    with open(file_path, 'r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            Movie.objects.create(
-                userId=row['userId'],
-                movieId=row['movieId'],
-                rating=row['rating'],
-                timestamp=row['timestamp']
-            )
+def get_top_rated_movies(n=10):
+    algo = model_test.LoadPickel()
+    m = algo_test.get_top_movies(n)
+    print(m)
+    
 
 def index(request):
-    algo = model_test.LoadPickel()
-    csv_file_path = "C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\ratings.csv"  # Replace with your actual file path
-    import_books(csv_file_path)
-    print('after import')
-    # get the recommended movies based on avengers movie id
-    #recommended_movies = algo_test.predict_rating(algo, 1, model_test.getMovieId('Avengers'))
-    print('check')
+    # algo = model_test.LoadPickel()
+    # recommended_movies = algo_test.predict_rating(algo, 1, model_test.getMovieId('Avengers'))
+    get_top_rated_movies()
+
 
     return render(request, 'index.html', {})
 
