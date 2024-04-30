@@ -1,12 +1,12 @@
-import pandas as pd
-import re
-import csv
-import numpy as np
+import pandas as pd, re, csv, numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from surprise import Reader, Dataset, SVD
 import pickle as pi, sqlite3
 
+def cleanTitle(title):
+    title = re.sub("[^a-zA-Z0-9 ]", "", title)
+    return title
 
 def LoadFile():
 
@@ -34,22 +34,18 @@ def LoadFile():
     return ratings, movies
 
 ratings, movies = LoadFile()
+user_ratings = ratings
 
 def LoadFile2(ratings):
-    # Define the format
     reader = Reader(rating_scale=(0, 5))
-
-    # Load the data from the file using the reader format
-    return Dataset.load_from_df(ratings[['userId', 'movieId', 'rating']], reader)
+    data = Dataset.load_from_df(ratings[['userId', 'movieId', 'rating']], reader)
+    return data
 
 def LoadPickel():
     with open('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\algo.pkl', 'rb') as algo:
         algo_content = algo.read()
     return algo_content
 
-def cleanTitle(title):
-    title = re.sub("[^a-zA-Z0-9 ]", "", title)
-    return title
 
 def getMovieId(title):
     movieId = search(cleanTitle(title)).head(1)['movieId'].to_string(index=False)

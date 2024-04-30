@@ -5,11 +5,11 @@ from surprise.model_selection import cross_validate
 from collections import defaultdict
 import pickle as pi, re, pandas as pd
 from datetime import time
+from model_test import user_ratings
 
 # load the data
-data = model_test.LoadFile2()
 ratings, movies = model_test.LoadFile()
-
+data = model_test.LoadFile2(ratings)
 
 def predict_rating(algo, user_id, movie_id):
     # Load the data
@@ -40,8 +40,6 @@ def getAccuracy():
 
     return results
 
-user_ratings = ratings # pd.read_csv('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\small_ratings.csv')
-
 def find_similar_movies(movie_id): # run for each movie then return a huge list of recommended movies
     similar_users = user_ratings[(user_ratings["movieId"] == movie_id) & (user_ratings["rating"] > 4)]["userId"].unique()
     similar_user_recs = user_ratings[(user_ratings["userId"].isin(similar_users)) & (user_ratings["rating"] > 4)]["movieId"]
@@ -58,7 +56,7 @@ def find_similar_movies(movie_id): # run for each movie then return a huge list 
     return rec_percentages.head(10).merge(movies, left_index=True, right_on="movieId")[["score", "title", "genres"]]
 
 # get top n movies
-def get_top_movies(n=10):
+def get_top_movies(n=10, user_ratings = ratings):
     top_n = defaultdict(list)
     for index, row in user_ratings.iterrows():
         top_n[row["userId"]].append((row["movieId"], row["rating"]))
