@@ -5,11 +5,11 @@ from surprise.model_selection import cross_validate
 from collections import defaultdict
 import pickle as pi, re, pandas as pd
 from datetime import time
-from model_test import user_ratings
 
 # load the data
 ratings, movies = model_test.LoadFile()
 data = model_test.LoadFile2(ratings)
+user_ratings = ratings
 
 def predict_rating(algo, user_id, movie_id):
     # Load the data
@@ -41,12 +41,12 @@ def getAccuracy():
     return results
 
 def find_similar_movies(movie_id): # run for each movie then return a huge list of recommended movies
-    similar_users = user_ratings[(user_ratings["movieId"] == movie_id) & (user_ratings["rating"] > 4)]["userId"].unique()
-    similar_user_recs = user_ratings[(user_ratings["userId"].isin(similar_users)) & (user_ratings["rating"] > 4)]["movieId"]
+    similar_users = ratings[(ratings["movieId"] == movie_id) & (ratings["rating"] > 4)]["userId"].unique()
+    similar_user_recs = ratings[(ratings["userId"].isin(similar_users)) & (ratings["rating"] > 4)]["movieId"]
     similar_user_recs = similar_user_recs.value_counts() / len(similar_users)
 
     similar_user_recs = similar_user_recs[similar_user_recs > .10]
-    all_users = user_ratings[(user_ratings["movieId"].isin(similar_user_recs.index)) & (user_ratings["rating"] > 4)]
+    all_users = ratings[(ratings["movieId"].isin(similar_user_recs.index)) & (ratings["rating"] > 4)]
     all_user_recs = all_users["movieId"].value_counts() / len(all_users["userId"].unique())
     rec_percentages = pd.concat([similar_user_recs, all_user_recs], axis=1)
     rec_percentages.columns = ["similar", "all"]
@@ -54,16 +54,4 @@ def find_similar_movies(movie_id): # run for each movie then return a huge list 
     rec_percentages["score"] = rec_percentages["similar"] / rec_percentages["all"]
     rec_percentages = rec_percentages.sort_values("score", ascending=False)
     return rec_percentages.head(10).merge(movies, left_index=True, right_on="movieId")[["score", "title", "genres"]]
-
-# get top n movies
-def get_top_movies(n=10, user_ratings = ratings):
-    top_n = defaultdict(list)
-    for index, row in user_ratings.iterrows():
-        top_n[row["userId"]].append((row["movieId"], row["rating"]))
-
-    for user_id, user_ratings in top_n.items():
-        user_ratings.sort(key=lambda x: x[1], reverse=True)
-        top_n[user_id] = user_ratings[:n]
-
-    return top_n
 

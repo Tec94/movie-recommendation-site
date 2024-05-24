@@ -4,6 +4,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from surprise import Reader, Dataset, SVD
 import pickle as pi, sqlite3
 
+model = None
+
 def cleanTitle(title):
     title = re.sub("[^a-zA-Z0-9 ]", "", title)
     return title
@@ -42,14 +44,16 @@ def LoadFile2(ratings):
     return data
 
 def LoadPickel():
-    with open('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\algo.pkl', 'rb') as algo:
-        algo_content = algo.read()
-    return algo_content
+    global model
+    if model == None:
+        with open('C:\\Users\\user\\Desktop\\New folder\\code\\movie-recommendation-site\\ml-25m\\algo.pkl', 'rb') as algo:
+            model = algo.read()
+    return model
 
 
 def getMovieId(title):
     movieId = search(cleanTitle(title)).head(1)['movieId'].to_string(index=False)
-    return movies[movies['title'] == title]['movieId'].to_string(index=False)
+    return movieId
 
 def search(title):
     vectorizer = TfidfVectorizer(ngram_range=(1,2))

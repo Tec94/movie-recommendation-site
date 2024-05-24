@@ -9,11 +9,11 @@ class User:
 
     def __str__(self):
         return self.username
-
-class Movie(models.Model):
-    userId = models.IntegerField()
-    movieId = models.IntegerField()
-    rating = models.DecimalField(max_digits=2, decimal_places=1)
+    
+class Rating(models.Model):
+    user_id = models.IntegerField()
+    movie_id = models.IntegerField()
+    rating = models.CharField(max_length=255)  # changed from models.FloatField()
     timestamp = models.IntegerField()
 
     def __str__(self):

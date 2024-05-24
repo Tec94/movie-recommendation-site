@@ -7,7 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-
+import threading
 import model_test, algo_test
 
 def getCoverUrl(movie_title):
@@ -18,19 +18,36 @@ def getCoverUrl(movie_title):
     return movie['cover url']
 
 def get_top_rated_movies(n=10):
-    algo = model_test.LoadPickel()
-    m = algo_test.get_top_movies(n)
-    print(m)
+    movies = algo_test.get_top_movies(n)
+    return movies
     
+def update_mv_list(username):
+    pass
+
 
 def index(request):
-    # algo = model_test.LoadPickel()
-    # recommended_movies = algo_test.predict_rating(algo, 1, model_test.getMovieId('Avengers'))
-    get_top_rated_movies()
+    threading.Thread(target=update_mv_list, args=[])
 
+    m_list = algo_test.find_similar_movies(model_test.getMovieId('The Avengers'))
+    print(m_list)
+    movie_dict = []
+    k = 0
+
+    # for i in m_list:
+    #     # print(m_list)
+    #     try:
+    #         print(getCoverUrl(i['title']))
+    #     except:
+    #         print("get URL function error")
+    #     try:
+    #         print(movie_dict[int(k)])
+    #     except:
+    #         print("movie_dict error")
+    #     movie_dict[k] = getCoverUrl(i['title'])
+    #     k += 1
 
     return render(request, 'index.html', {})
-
+ 
 def login(request):
     next = request.POST.get('next', '/')
     return HttpResponseRedirect(next)
